@@ -19,7 +19,7 @@ class Metric extends MetricInterface
         $options = array_merge_recursive($options, array(
             'pa11y_path' => 'pa11y',
             'standard' => 'WCAG2AA', //The standard to test against (Section508, WCAG2A, WCAG2AA (default), WCAG2AAA)
-            'help_text_general' => 'To locate this error on your page install the bookmarklet found at http://squizlabs.github.io/HTML_CodeSniffer/ and run it on your page.'
+            'help_text_general' => 'To locate this error on your page install the bookmarklet found in the metric description and run it on your page.'
         ));
 
         parent::__construct($plugin_name, $options);
