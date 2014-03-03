@@ -114,7 +114,7 @@ class Metric extends MetricInterface
      */
     public function getResults($uri)
     {
-        $json = exec($this->options['pa11y_path'] . ' -r json -s ' . escapeshellarg($this->options["standard"]) . ' ' . escapeshellarg($uri));
+        $json = exec(escapeshellcmd($this->options['pa11y_path'] . ' -r json -s ' . escapeshellarg($this->options["standard"]) . ' ' . escapeshellarg($uri)));
         
         if (!$data = json_decode($json, true)) {
             return false;
