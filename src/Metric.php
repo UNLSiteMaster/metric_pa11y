@@ -19,7 +19,7 @@ class Metric extends MetricInterface
         $options = array_merge_recursive($options, array(
             'pa11y_path' => 'pa11y',
             'standard' => 'WCAG2AA', //The standard to test against (Section508, WCAG2A, WCAG2AA (default), WCAG2AAA)
-            'help_text_general' => 'To locate this error on your page install the bookmarklet found at http://squizlabs.github.io/HTML_CodeSniffer/ and run it on your page.'
+            'help_text_general' => 'To locate this error on your page install the bookmarklet found in the metric description and run it on your page.'
         ));
 
         parent::__construct($plugin_name, $options);
@@ -114,7 +114,17 @@ class Metric extends MetricInterface
      */
     public function getResults($uri)
     {
-        $json = exec(escapeshellcmd($this->options['pa11y_path'] . ' -r json -s ' . escapeshellarg($this->options["standard"]) . ' ' . escapeshellarg($uri)));
+        $command = $this->options['pa11y_path'] . ' -r json -s ' . escapeshellarg($this->options["standard"]);
+        
+        $config_file = dirname(__DIR__) . '/config/pa11y.json';
+        if (file_exists($config_file)) {
+            $command .= ' --config ' . $config_file;
+        }
+        echo $config_file . PHP_EOL;
+        
+        $command .= ' ' . escapeshellarg($uri);
+        
+        $json = exec(escapeshellcmd($command));
         
         if (!$data = json_decode($json, true)) {
             return false;
