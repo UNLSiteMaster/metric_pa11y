@@ -114,7 +114,17 @@ class Metric extends MetricInterface
      */
     public function getResults($uri)
     {
-        $json = exec(escapeshellcmd($this->options['pa11y_path'] . ' -r json -s ' . escapeshellarg($this->options["standard"]) . ' ' . escapeshellarg($uri)));
+        $command = $this->options['pa11y_path'] . ' -r json -s ' . escapeshellarg($this->options["standard"]);
+        
+        $config_file = dirname(__DIR__) . '/config/pa11y.json';
+        if (file_exists($config_file)) {
+            $command .= ' --config ' . $config_file;
+        }
+        echo $config_file . PHP_EOL;
+        
+        $command .= ' ' . escapeshellarg($uri);
+        
+        $json = exec(escapeshellcmd($command));
         
         if (!$data = json_decode($json, true)) {
             return false;
