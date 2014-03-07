@@ -9,6 +9,17 @@ use SiteMaster\Core\Auditor\Site\Page;
 
 class Metric extends MetricInterface
 {
+    /**
+     * Default grading method.
+     * Start with 100 points.
+     * Subtract 10 points for every error, unless a specific value was specified
+     */
+    const GRADE_METHOD_DEFAULT = 1;
+    
+    /**
+     * Grade as pass fail.
+     */
+    const GRADE_METHOD_PASS_FAIL = 3;
 
     /**
      * @param string $plugin_name
@@ -19,7 +30,11 @@ class Metric extends MetricInterface
         $options = array_merge_recursive($options, array(
             'pa11y_path' => 'pa11y',
             'standard' => 'WCAG2AA', //The standard to test against (Section508, WCAG2A, WCAG2AA (default), WCAG2AAA)
-            'help_text_general' => 'To locate this error on your page install the bookmarklet found in the metric description and run it on your page.'
+            'help_text_general' => 'To locate this error on your page install the bookmarklet found in the metric description and run it on your page.',
+            'grading_method' => self::GRADE_METHOD_DEFAULT,
+            'point_deductions' => array(
+                'default' => 10,
+            ),
         ));
 
         parent::__construct($plugin_name, $options);
@@ -54,7 +69,11 @@ class Metric extends MetricInterface
      */
     public function isPassFail()
     {
-        return true;
+        if ($this->options['grading_method'] == self::GRADE_METHOD_PASS_FAIL) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -98,12 +117,27 @@ class Metric extends MetricInterface
             
             $marks[$machine_name] = true;
             
-            $mark = $this->getMark($machine_name, $result['code'], 1, $result['message'], $help_text);
+            $mark = $this->getMark($machine_name, $result['code'], $this->getPointsForCode($result['code']), $result['message'], $help_text);
 
             $page->addMark($mark);
         }
 
         return true;
+    }
+
+    /**
+     * Get the points to deduct for a given code
+     * 
+     * @param string $code
+     * @return int
+     */
+    public function getPointsForCode($code)
+    {
+        if (isset($this->options['point_deductions'][$code])) {
+            return $this->options['point_deductions'][$code];
+        }
+        
+        return $this->options['point_deductions']['default'];
     }
 
     /**
