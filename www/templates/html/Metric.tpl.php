@@ -7,5 +7,5 @@
 </p>
 
 <p>
-    This service is provided by <a href="http://squizlabs.github.io/HTML_CodeSniffer/">HTML_CodeSniffer</a> and <a href=="http://pa11y.org/">pa11y</a>
+    This service is provided by <a href="http://squizlabs.github.io/HTML_CodeSniffer/">HTML_CodeSniffer</a> and <a href="http://pa11y.org/">pa11y</a>
 </p>
