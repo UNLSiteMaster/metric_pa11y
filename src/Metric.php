@@ -27,7 +27,7 @@ class Metric extends MetricInterface
      */
     public function __construct($plugin_name, array $options = array())
     {
-        $options = array_merge_recursive($options, array(
+        $options = array_replace_recursive(array(
             'pa11y_path' => 'pa11y',
             'standard' => 'WCAG2AA', //The standard to test against (Section508, WCAG2A, WCAG2AA (default), WCAG2AAA)
             'help_text_general' => 'To locate this error on your page install the bookmarklet found in the metric description and run it on your page.',
@@ -35,7 +35,7 @@ class Metric extends MetricInterface
             'point_deductions' => array(
                 'default' => 10,
             ),
-        ));
+        ), $options);
 
         parent::__construct($plugin_name, $options);
     }
