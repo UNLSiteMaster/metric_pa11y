@@ -2,7 +2,7 @@
 require_once(__DIR__ . '/../../init.php');
 
 header('Content-Type: application/javascript');
-$html_code_sniffer_path = 'http://squizlabs.github.io/HTML_CodeSniffer/build/';
+$html_code_sniffer_path = '//squizlabs.github.io/HTML_CodeSniffer/build/';
 $config_file = __DIR__ . '/config/pa11y.json';
 $config = array(
     'path' => $html_code_sniffer_path,
