@@ -114,6 +114,14 @@ class Metric extends MetricInterface
             if (isset($this->options['help_text'][$result['code']])) {
                 $help_text .= $this->options['help_text'][$result['code']];
             }
+
+            $techniques = $this->getTechniques($result['code']);
+            if (!empty($techniques)) {
+                $help_text .= PHP_EOL . '***' . PHP_EOL . 'View WCAG documentation for techniques used to find this error:' . PHP_EOL;
+                foreach ($techniques as $technique) {
+                    $help_text .= PHP_EOL . ' * [' . $technique . '](http://www.w3.org/TR/WCAG20-TECHS/' . $technique . ')';
+                }
+            }
             
             $marks[$machine_name] = true;
             
@@ -123,6 +131,23 @@ class Metric extends MetricInterface
         }
 
         return true;
+    }
+
+    /**
+     * Get the techniques used to find the error
+     * 
+     * @param string $code
+     * @return array - array of technique codes
+     */
+    public function getTechniques($code)
+    {
+        $parts = explode('.', $code);
+        
+        if (!isset($parts[4])) {
+            return array();
+        }
+        
+        return explode(',', $parts[4]);
     }
 
     /**
