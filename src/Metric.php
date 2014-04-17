@@ -117,7 +117,7 @@ class Metric extends MetricInterface
             
             $marks[$machine_name] = true;
             
-            $mark = $this->getMark($machine_name, $result['code'], $this->getPointsForCode($result['code']), $result['message'], $help_text);
+            $mark = $this->getMark($machine_name, $result['message'], $this->getPointsForCode($result['code']), $result['message'], $help_text);
 
             $page->addMark($mark);
         }
