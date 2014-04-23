@@ -183,7 +183,7 @@ class Metric extends MetricInterface
         
         $command .= ' ' . escapeshellarg($uri);
         
-        $json = exec(escapeshellcmd($command));
+        $json = exec($command);
         
         if (!$data = json_decode($json, true)) {
             return false;
