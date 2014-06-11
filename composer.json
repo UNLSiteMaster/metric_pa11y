@@ -1,0 +1,5 @@
+{
+    "require": {
+        "nubs/hiatus": "dev-master"
+    }
+}

@@ -182,8 +182,8 @@ class Metric extends MetricInterface
         echo $config_file . PHP_EOL;
         
         $command .= ' ' . escapeshellarg($uri);
-        
-        $json = exec($command);
+
+        list($exitStatus, $json, $stderr) = \Hiatus\exec($command, array(), 30);
         
         if (!$data = json_decode($json, true)) {
             return false;
