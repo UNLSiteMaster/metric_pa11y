@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "bae4331b627819b0ab214cc4e85a1773",
+    "hash": "3e736dab3eb64808caf7401d5030a237",
     "packages": [
         {
             "name": "nubs/hiatus",
