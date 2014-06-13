@@ -179,7 +179,6 @@ class Metric extends MetricInterface
         if (file_exists($config_file)) {
             $command .= ' --config ' . $config_file;
         }
-        echo $config_file . PHP_EOL;
         
         $command .= ' ' . escapeshellarg($uri);
 
