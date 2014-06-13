@@ -183,12 +183,19 @@ class Metric extends MetricInterface
         
         $command .= ' ' . escapeshellarg($uri);
 
-        list($exitStatus, $json, $stderr) = \Hiatus\exec($command, array(), 30);
+        list($exitStatus, $output, $stderr) = \Hiatus\exec($command, array(), 30);
         
-        if (!$data = json_decode($json, true)) {
-            return false;
+        //Output MAY contain many lines, but the json response is always on one line.
+        $output = explode(PHP_EOL, $output);
+        
+        foreach ($output as $line) {
+            //Loop over each line and find the json response
+            if ($data = json_decode($line, true)) {
+                //Found it... return the data.
+                return $data;
+            }
         }
         
-        return $data;
+        return false;
     }
 }
