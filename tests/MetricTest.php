@@ -11,7 +11,9 @@ class MetricTest extends \PHPUnit_Framework_TestCase
         $metric = new Metric('metric_pa11y');
 
         $json = $metric->getResults('http://wdn.unl.edu/');
-        
         $this->assertNotEquals(false, $json);
+
+        $json = $metric->getResults('http://unlcms.unl.edu/university-communications/sitemaster/pa11yerrors');
+        $this->assertNotEquals(false, $json, 'success even if there are javascript errors');
     }
 }
