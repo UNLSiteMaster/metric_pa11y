@@ -182,7 +182,13 @@ class Metric extends MetricInterface
         
         $command .= ' ' . escapeshellarg($uri);
 
-        list($exitStatus, $output, $stderr) = \Hiatus\exec($command, array(), 30);
+        /**
+         * Execute with a 25 second timeout (just under the default of 30).
+         * one or more of pa11y, phantomjs, or node have an issue where child process are not being killed and turn into zombies.
+         * $this->exec aims to curb that problem by manually setting a timeout.
+         */
+        $command_helper = new CommandHelper();
+        list($exitStatus, $output, $stderr) = $command_helper->exec($command, 25);
         
         //Output MAY contain many lines, but the json response is always on one line.
         $output = explode(PHP_EOL, $output);
