@@ -173,7 +173,12 @@ class Metric extends MetricInterface
      */
     public function getResults($uri)
     {
-        $command = $this->options['pa11y_path'] . ' -r json -s ' . escapeshellarg($this->options["standard"]);
+        $plugin_options = $this->getPlugin()->getOptions();
+        
+        $command = $this->options['pa11y_path']
+            . ' -r json'
+            . ' -s ' . escapeshellarg($this->options["standard"])
+            . ' -c ' . escapeshellarg($plugin_options['html_codesniffer_url'] . 'HTMLCS.js');
         
         $config_file = dirname(__DIR__) . '/config/pa11y.json';
         if (file_exists($config_file)) {
