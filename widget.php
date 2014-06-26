@@ -1,8 +1,10 @@
 <?php
 require_once(__DIR__ . '/../../init.php');
+$metric_pa11y = \SiteMaster\Core\Plugin\PluginManager::getManager()->getPluginInfo('metric_pa11y');
+$options = $metric_pa11y->getOptions();
 
 header('Content-Type: application/javascript');
-$html_code_sniffer_path = '//squizlabs.github.io/HTML_CodeSniffer/build/';
+$html_code_sniffer_path = $options['html_codesniffer_url'];
 $config_file = __DIR__ . '/config/pa11y.json';
 $config = array(
     'path' => $html_code_sniffer_path,
