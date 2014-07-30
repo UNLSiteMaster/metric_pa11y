@@ -125,6 +125,16 @@ class Metric extends MetricInterface
             
             $marks[$machine_name] = true;
             
+            //Trim contrast messages because they contain suggestions which change per instance.
+            $contrast_3_1 = 'This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 3:1';
+            $contrast_45_1 = 'This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1';
+            if ($pos = stripos($result['message'], $contrast_3_1) === 0) {
+                $result['message'] = $contrast_3_1;
+            }
+            if ($pos = stripos($result['message'], $contrast_45_1) === 0) {
+                $result['message'] = $contrast_45_1;
+            }
+
             $mark = $this->getMark($machine_name, $result['message'], $this->getPointsForCode($result['code']), $result['message'], $help_text);
 
             $page->addMark($mark);
