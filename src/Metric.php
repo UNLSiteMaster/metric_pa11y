@@ -3,6 +3,7 @@ namespace SiteMaster\Plugins\Metric_pa11y;
 
 use SiteMaster\Core\Auditor\Logger\Metrics;
 use SiteMaster\Core\Auditor\MetricInterface;
+use SiteMaster\Core\Config;
 use SiteMaster\Core\Registry\Site;
 use SiteMaster\Core\Auditor\Scan;
 use SiteMaster\Core\Auditor\Site\Page;
@@ -28,8 +29,6 @@ class Metric extends MetricInterface
     public function __construct($plugin_name, array $options = array())
     {
         $options = array_replace_recursive(array(
-            'pa11y_path' => 'pa11y',
-            'standard' => 'WCAG2AA', //The standard to test against (Section508, WCAG2A, WCAG2AA (default), WCAG2AAA)
             'help_text_general' => 'To locate this error on your page install the bookmarklet found in the metric description and run it on your page.',
             'grading_method' => self::GRADE_METHOD_DEFAULT,
             'point_deductions' => array(
@@ -91,7 +90,7 @@ class Metric extends MetricInterface
      */
     public function scan($uri, \DOMXPath $xpath, $depth, Page $page, Metrics $context)
     {
-        $results = $this->getREsults($uri);
+        $results = $this->getResults($page->id);
         $marks = array();
         
         if (!isset($results['results'])) {
@@ -178,32 +177,24 @@ class Metric extends MetricInterface
     /**
      * Get the results for a given uri
      * 
-     * @param $uri
+     * @param $id - the id of the page
      * @return bool|mixed
      */
-    public function getResults($uri)
+    public function getResults($id)
     {
-        $plugin_options = $this->getPlugin()->getOptions();
-        
-        $command = $this->options['pa11y_path']
-            . ' -r json'
-            . ' -s ' . escapeshellarg($this->options["standard"])
-            . ' -c ' . escapeshellarg($plugin_options['html_codesniffer_url'] . 'HTMLCS.js');
-        
-        $config_file = dirname(__DIR__) . '/config/pa11y.json';
-        if (file_exists($config_file)) {
-            $command .= ' --config ' . $config_file;
-        }
-        
-        $command .= ' ' . escapeshellarg($uri);
+        $request_url = Config::get('URL') . 'plugins/metric_pa11y/service.php?page=' . $id;
 
-        /**
-         * Execute with a 25 second timeout (just under the default of 30).
-         * one or more of pa11y, phantomjs, or node have an issue where child process are not being killed and turn into zombies.
-         * $this->exec aims to curb that problem by manually setting a timeout.
-         */
-        $command_helper = new CommandHelper();
-        list($exitStatus, $output, $stderr) = $command_helper->exec($command, 25);
+        $stream_context = stream_context_create(array(
+            'http'=> array (
+                'timeout' => 30 // 30 sec
+            )
+        ));
+
+        $output = file_get_contents($request_url, false, $stream_context);
+        
+        if (!$output) {
+            return false;
+        }
         
         //Output MAY contain many lines, but the json response is always on one line.
         $output = explode(PHP_EOL, $output);

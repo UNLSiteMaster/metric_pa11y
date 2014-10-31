@@ -8,7 +8,9 @@ use SiteMaster\Core\Events\RegisterTheme;
 class Plugin extends PluginInterface
 {
     protected $options = array(
-        'html_codesniffer_url' => '//squizlabs.github.io/HTML_CodeSniffer/build/'
+        'html_codesniffer_url' => '//squizlabs.github.io/HTML_CodeSniffer/build/',
+        'pa11y_path'           => 'pa11y',
+        'standard'             => 'WCAG2AA', //The standard to test against (Section508, WCAG2A, WCAG2AA (default), WCAG2AAA)
     );
     
     /**
