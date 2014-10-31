@@ -90,7 +90,7 @@ class Metric extends MetricInterface
      */
     public function scan($uri, \DOMXPath $xpath, $depth, Page $page, Metrics $context)
     {
-        $results = $this->getResults($uri);
+        $results = $this->getResults($page->id);
         $marks = array();
         
         if (!isset($results['results'])) {
@@ -177,12 +177,12 @@ class Metric extends MetricInterface
     /**
      * Get the results for a given uri
      * 
-     * @param $uri
+     * @param $id - the id of the page
      * @return bool|mixed
      */
-    public function getResults($uri)
+    public function getResults($id)
     {
-        $request_url = Config::get('URL') . 'plugins/metric_pa11y/service.php?url=' . urlencode($uri);
+        $request_url = Config::get('URL') . 'plugins/metric_pa11y/service.php?page=' . $id;
 
         $stream_context = stream_context_create(array(
             'http'=> array (

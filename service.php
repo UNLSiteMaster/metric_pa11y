@@ -30,8 +30,12 @@ function getResults($uri, $plugin_options)
 
 header('Content-Type: application/json');
 
-if (!isset($_GET['url'])) {
+if (!isset($_GET['page'])) {
     throw new \SiteMaster\Core\InvalidArgumentException('A URL is required', 400);
 }
 
-echo getResults($_GET['url'], $options);
+if (!$page = \SiteMaster\Core\Auditor\Site\Page::getByID($_GET['page'])) {
+    throw new \SiteMaster\Core\InvalidArgumentException('Page Not Found', 400);
+}
+
+echo getResults($page->uri, $options);
