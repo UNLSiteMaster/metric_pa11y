@@ -10,7 +10,7 @@ function getResults($uri, $plugin_options)
         . ' -s ' . escapeshellarg($plugin_options["standard"])
         . ' -c ' . escapeshellarg($plugin_options['html_codesniffer_url'] . 'HTMLCS.js');
 
-    $config_file = dirname(__DIR__) . '/config/pa11y.json';
+    $config_file = __DIR__ . '/config/pa11y.json';
     if (file_exists($config_file)) {
         $command .= ' --config ' . $config_file;
     }
