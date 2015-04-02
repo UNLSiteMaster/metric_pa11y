@@ -137,7 +137,7 @@ class Metric extends MetricInterface
 
             if ($machine_name == 'pa11y_a9fc4d3280023cdc68769913e4976d94') {
                 //This error was including the anchor name.
-                $result['message'] = 'This page contains links which point to a named achnor within the document, but no ancors exist with those names.';
+                $result['message'] = 'This page contains links which point to a named achnor within the document, but no achnors exist with those names.';
             }
 
             $mark = $this->getMark($machine_name, $result['message'], $this->getPointsForCode($result['code']), $result['message'], $help_text);
