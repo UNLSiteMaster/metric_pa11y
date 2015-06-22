@@ -91,23 +91,14 @@ class Metric extends MetricInterface
      */
     public function scan($uri, \DOMXPath $xpath, $depth, Page $page, Metrics $context)
     {
-        $results = $this->getREsults($uri);
-        $marks = array();
+        $results = $this->getResults($uri);
         
-        if (!isset($results['results'])) {
-            return false;
-        }
-        
-        foreach ($results['results'] as $result) {
+        foreach ($results as $result) {
             if ($result['type'] != 'error') {
                 continue;
             }
 
             $machine_name = 'pa11y_' . md5($result['code']);
-            if (isset($marks[$machine_name])) {
-                //Only store one instance of each error (because we are not matching it with exact context)
-                continue;
-            }
 
             $help_text = $this->options['help_text_general'];
             
@@ -122,8 +113,6 @@ class Metric extends MetricInterface
                     $help_text .= PHP_EOL . ' * [' . $technique . '](http://www.w3.org/TR/WCAG20-TECHS/' . $technique . ')';
                 }
             }
-            
-            $marks[$machine_name] = true;
             
             //Trim contrast messages because they contain suggestions which change per instance.
             $contrast_3_1 = 'This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 3:1';
@@ -141,8 +130,10 @@ class Metric extends MetricInterface
             }
 
             $mark = $this->getMark($machine_name, $result['message'], $this->getPointsForCode($result['code']), $result['message'], $help_text);
-
-            $page->addMark($mark);
+            
+            $page->addMark($mark, array(
+                'context' => htmlspecialchars($result['context']),
+            ));
         }
 
         return true;
@@ -193,7 +184,7 @@ class Metric extends MetricInterface
         $command = $this->options['pa11y_path']
             . ' -r json'
             . ' -s ' . escapeshellarg($this->options["standard"])
-            . ' -c ' . escapeshellarg($plugin_options['html_codesniffer_url'] . 'HTMLCS.js');
+            . ' -H ' . escapeshellarg($plugin_options['html_codesniffer_url'] . 'HTMLCS.js');
         
         $config_file = dirname(__DIR__) . '/config/pa11y.json';
         if (file_exists($config_file)) {
