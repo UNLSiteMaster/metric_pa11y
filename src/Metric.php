@@ -35,6 +35,7 @@ class Metric extends MetricInterface
             'point_deductions' => array(
                 'default' => 10,
             ),
+            'wait' => 500
         ), $options);
 
         parent::__construct($plugin_name, $options);
@@ -184,7 +185,8 @@ class Metric extends MetricInterface
         $command = $this->options['pa11y_path']
             . ' -r json'
             . ' -s ' . escapeshellarg($this->options["standard"])
-            . ' -H ' . escapeshellarg($plugin_options['html_codesniffer_url'] . 'HTMLCS.js');
+            . ' -H ' . escapeshellarg($plugin_options['html_codesniffer_url'] . 'HTMLCS.js')
+            . ' -w ' . escapeshellarg($this->options["wait"]);
         
         $config_file = dirname(__DIR__) . '/config/pa11y.json';
         if (file_exists($config_file)) {
