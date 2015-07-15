@@ -94,6 +94,11 @@ class Metric extends MetricInterface
     {
         $results = $this->getResults($uri);
         
+        if (false === $results) {
+            //Something didn't work right
+            return false;
+        }
+        
         foreach ($results as $result) {
             if ($result['type'] != 'error') {
                 continue;
