@@ -8,7 +8,7 @@ use SiteMaster\Core\Events\RegisterTheme;
 class Plugin extends PluginInterface
 {
     protected $options = array(
-        'html_codesniffer_url' => '//squizlabs.github.io/HTML_CodeSniffer/build/'
+        'html_codesniffer_url' => 'https://squizlabs.github.io/HTML_CodeSniffer/build/'
     );
     
     /**
