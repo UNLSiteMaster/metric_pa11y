@@ -1,6 +1,9 @@
 # metric_pa11y
 Accessibility metric powered by pa11y
 
+## Notice
+This plugin is no longer supported and you should use the Axe metric (https://github.com/UNLSiteMaster/metric_axe) instead
+
 ## Installation
 You will need to do two things to prepare this metric for installation.
 
